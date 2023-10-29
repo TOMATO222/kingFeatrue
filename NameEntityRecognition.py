@@ -34,13 +34,27 @@ def getSentences(fileLoc):
         sentences = file.read().split('\n')
     return sentences
 
-def modifytxt(fileLoc):
+def modifytxt(fileLoc, outLoc):
     with open(fileLoc, 'r', encoding='utf-8') as file:
         text = file.read()
     # 使用字符串替换功能将换行符和空格替换为空字符
     text = text.replace('\n', '').replace(' ', '')
-    print(text)
-    return text
+
+    # 按句号分割文本
+    sentences = text.split('。')
+    # 初始化一个计数器以在每40个句子后添加换行符
+    count = 0
+    result = ''
+    for sentence in sentences:
+        result += sentence + '。'
+        count += 1
+        if count == 40:
+            result += '\n'
+            count = 0
+
+    # 将结果写回文件
+    with open(outLoc, 'w', encoding='utf-8') as output_file:
+        output_file.write(result)
 
 
 def test(sentence):
@@ -57,62 +71,62 @@ def test(sentence):
 
 
 def pipelineWork(open_path, write_path):
+    # 获得文本的段落
+    sentences = getSentences(open_path)
     # 打开写入的文件
-    with open(write_path, 'a', encoding='utf-8') as file:
-        # # 获得分句
-        # sentences = getSentences(open_path)
 
-        # 获得初始文本
-        sentences = modifytxt(open_path)
+    for sentence in sentences:
+        # api限流，1分钟只能调2次
+        time.sleep(30)
+        print(sentence)
 
-        # 针对每一个分句进行命名实体识别与结果打印
-        id = 1
-        for sentence in sentences:
-            # hanLP接口限流
-            time.sleep(60)
-            # 在休息结束后执行后续代码
-            print("1分钟休息结束，执行后续代码")
-
-            # 分词
-            tokens = cutwords(sentence)
-            # 命名实体识别
-            NER_result = NER4Modern(tokens)
-            # 打印
+        # 分句+分词
+        tokens = cutwords(sentence)
+        # 命名实体识别
+        NER_result = NER4Modern(tokens)
+        # 匹配结果里的token & ner，并打印出来
+        tokenList = NER_result.get("tok")
+        nerList = NER_result.get("ner/msra")
+        length = len(tokenList)
+        # 打印
+        with open(write_path, 'a', encoding='utf-8') as file:
             # 重定向输出位置为打开的文件
             sys.stdout = file
-            print("【", id, "】", " : ", sentence)
-            id += 1
-            print(NER_result)
-            print('\n')
+            for i in range(length):
+                print(tokenList[i])
+                print(nerList[i])
+                print('\n')
             # 重定向标准输出到原始位置
             sys.stdout = sys.__stdout__
-            print("done: ", sentence)
+            print("done ")
+        # 关闭写入的文件
+        file.close()
 
-    # 关闭写入的文件
-    file.close()
 
 def gaozu(loc):
-    # open file location
+    # 原始文本地址
     open_path = '/Users/tanyuyao/Documents/PaperDocument/Historian/EnglishLoc/gaozu/target.txt'
-    # writen file location
+    # 合并段落的文本地址--用于命名实体识别的文件
+    outLoc = '/Users/tanyuyao/Documents/PaperDocument/Historian/EnglishLoc/gaozu/target2.txt'
+    # 合并段落
+    modifytxt(open_path, outLoc)
+
+    # 写入处理结果的文本地址
     custom_filename = 'gaozu.txt'
     write_path = os.path.join(loc, custom_filename)
-    pipelineWork(open_path, write_path)
+
+    # 命名实体识别
+    pipelineWork(outLoc, write_path)
 
 if __name__ == '__main__':
     # #################################
     # # test part
     # test(sentence='2021年HanLPv2.1为生产环境带来次世代最先进的多语种NLP技术。高阻来到北京立方庭参观自然语义科技公司。')
     # modifytxt('/Users/tanyuyao/Documents/PaperDocument/Historian/EnglishLoc/gaozu/target.txt')
-    open_path = '/Users/tanyuyao/Documents/PaperDocument/Historian/EnglishLoc/gaozu/target.txt'
-    write_path = '/Users/tanyuyao/Documents/pythonCode/kingFeatrue/data'
+    # open_path = '/Users/tanyuyao/Documents/PaperDocument/Historian/EnglishLoc/gaozu/target.txt'
+    # write_path = '/Users/tanyuyao/Documents/pythonCode/kingFeatrue/data'
     # #################################
 
-    # # lvtaihou
-    # # open file location
-    # open_path = '/Users/tanyuyao/Documents/PaperDocument/Historian/EnglishLoc/lvtaihou/target2.txt'
-    # # writen file location
-    # write_path = '/Users/tanyuyao/Documents/PaperDocument/Historian/EnglishLoc/lvtaihou/preProcessed.txt'
-
-    # # process part
-    # pipelineWork(open_path, write_path)
+    # process part
+    loc = '/Users/tanyuyao/Documents/pythonCode/kingFeatrue/data'
+    gaozu(loc)
