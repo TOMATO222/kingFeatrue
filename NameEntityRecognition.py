@@ -42,13 +42,13 @@ def modifytxt(fileLoc, outLoc):
 
     # 按句号分割文本
     sentences = text.split('。')
-    # 初始化一个计数器以在每40个句子后添加换行符
+    # 初始化一个计数器以在每50个句子后添加换行符
     count = 0
     result = ''
     for sentence in sentences:
         result += sentence + '。'
         count += 1
-        if count == 40:
+        if count == 50:
             result += '\n'
             count = 0
 
@@ -77,7 +77,7 @@ def pipelineWork(open_path, write_path):
 
     for sentence in sentences:
         # api限流，1分钟只能调2次
-        time.sleep(30)
+        time.sleep(60)
         print(sentence)
 
         # 分句+分词
@@ -118,6 +118,21 @@ def gaozu(loc):
     # 命名实体识别
     pipelineWork(outLoc, write_path)
 
+def lvtaihou(loc):
+    # 原始文本地址
+    open_path = '/Users/tanyuyao/Documents/PaperDocument/Historian/EnglishLoc/lvtaihou/target.txt'
+    # 合并段落的文本地址--用于命名实体识别的文件
+    outLoc = '/Users/tanyuyao/Documents/PaperDocument/Historian/EnglishLoc/lvtaihou/target2.txt'
+    # 合并段落
+    modifytxt(open_path, outLoc)
+
+    # 写入处理结果的文本地址
+    custom_filename = 'lvtaihou.txt'
+    write_path = os.path.join(loc, custom_filename)
+
+    # 命名实体识别
+    pipelineWork(outLoc, write_path)
+
 if __name__ == '__main__':
     # #################################
     # # test part
@@ -129,4 +144,5 @@ if __name__ == '__main__':
 
     # process part
     loc = '/Users/tanyuyao/Documents/pythonCode/kingFeatrue/data'
-    gaozu(loc)
+    # gaozu(loc)
+    lvtaihou(loc)
