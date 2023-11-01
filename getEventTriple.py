@@ -57,7 +57,9 @@ def getSentence(fileLoc):
         sentences = file.read().split('\n')
     sentence_list = []
     for sentence in sentences:
-        sentence_list.append(StnSplit().split(sentence))
+        sents_list = StnSplit().split(sentence)
+        for sent in sents_list:
+            sentence_list.append(sent)
     return sentence_list
 
 
@@ -90,15 +92,18 @@ def extraction(sentence):
     # 判断 规则1 是否抽取出了对应三元组 0-no, 1-yes
     flag = 0
     flag, triples = rule1(sentence, flag)
-    print(triples)
+    # 规则1 抽到了三元组
+    if flag == 1:
+        for triple in triples:
+            print(triple)
 
 # rule1: 语义角色标注结果A0 verb A1
 def rule1(sentence, flag):
-    print("----rule1 begin----")
+    print("rule1 begin")
     rule1_triples = []
     # 语义角色标注结果集
     srl_results = srlProcess(sentence)
-    print(srl_results)
+    # print(srl_results)
     # 遍历该句话的结果
     for srl_result in srl_results:
         # 谓词
@@ -115,10 +120,7 @@ def rule1(sentence, flag):
             triple = "A0: " + dependencies['A0'], "predicate: " + predicate, "A1: " + dependencies['A1']
             rule1_triples.append(triple)
     # print(rule1_triples)
-    if flag == 1:
-        print("----rule1 extracted----")
-    else :
-        print("----rule1 did not extract ----")
+    print("rule1 done")
     return flag, rule1_triples
 
 
@@ -127,8 +129,8 @@ def getTriple_dry(fileLoc):
     # 获得分句
     sentence_list = getSentence(fileLoc)
     for sentence in sentence_list:
-        print(sentence)
-        extraction(sentence)
+        if sentence != " ":
+            extraction(sentence)
 
 
 
