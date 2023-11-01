@@ -55,12 +55,13 @@ def test(sentcence):
     for c, p, h, l in zip(cws_result, pos_result, dep_result['head'], dep_result['label']):
         print(f"{c:<6} {p:<4} {h:<4} {l}")
     flag, triples, dependency_dict = rule2(cws_result, pos_result, dep_result, 0)
-    # print(dependency_dict)
+    for word, info in dependency_dict.items():
+        print(word, ": ", info)
 
-    # 规则3
-    print(dependency_dict)
-    flag, rule3_triples = rule3(cws_result, pos_result, dep_result, dependency_dict, 0)
-    print(flag)
+    # 规则5
+    flag, triples = rule5(dependency_dict, 0)
+    print(triples)
+
 
     # 执行抽取函数
     # extraction(sentence)
@@ -126,11 +127,24 @@ def extraction(sentence):
     if flag == 2:
         print("【RULE 2】", triple2)
 
-    # 规则3
-    flag, triple3 = rule3(cws_result, pos_result, dep_result, dependency_dict, flag)
-    # 规则3 抽到了三元组
-    if flag == 3:
-        print("【RULE 3】", triple3)
+    # 规则5
+    flag, triple5 = rule5(dependency_dict, flag)
+    # 规则5 抽到了三元组
+    if flag == 5:
+        print("【RULE 5】", triple5)
+
+    # # 规则3 -- 不采用
+    # flag, triple3 = rule3(dependency_dict, flag)
+    # # 规则3 抽到了三元组
+    # if flag == 3:
+    #     print("【RULE 3】", triple3)
+
+    # 规则4 -- 不采用
+    # flag, triple4 = rule4(dependency_dict, flag)
+    # # 规则4 抽到了三元组
+    # if flag == 4:
+    #     print("【RULE 4】", triple4)
+
 
 # rule1: 语义角色标注结果A0 verb A1
 def rule1(sentence, flag):
@@ -184,7 +198,7 @@ def rule2(cws_result, pos_result, dep_result, flag):
 
             # 存储所有指向该动词的分词的依存句法分析结果
             dependency_dict[word] = head_dependencies
-    # 遍历依存句法分析结果字典，找SBV & VOB 共现
+    # 遍历verb的依存句法分析结果字典，找SBV & VOB 共现
     for word, info in dependency_dict.items():
         # 检查是否同时出现"SBV"和"VOB"关系
         if "SBV" in info.values() and "VOB" in info.values():
@@ -204,8 +218,8 @@ def rule2(cws_result, pos_result, dep_result, flag):
 
     return flag, rule2_triples, dependency_dict
 
-# rule 3: 依存句法分析， ATT verb VOB
-def rule3(cws_result, pos_result, dep_result, dependency_dict, flag):
+# rule 3: 依存句法分析， ATT verb VOB  不采用
+def rule3(dependency_dict, flag):
     # 存储抽取的三元组
     rule3_triples = []
     # 遍历依存句法分析结果字典，找ATT & VOB 共现
@@ -227,6 +241,46 @@ def rule3(cws_result, pos_result, dep_result, dependency_dict, flag):
                 # print(triple)
     return flag, rule3_triples
 
+# rule 4: 依存句法分析，SBV verb+CMP POB
+def rule4(dependency_dict, flag):
+    pass
+
+# rule 5: 依存句法分析，SBV-verb1 verb1-COO-verb2 verb2-VOB
+def rule5(dependency_dict, flag):
+    # 存储抽取的三元组
+    rule5_triples = []
+
+    # 遍历依存句法分析结果字典，找SBV-verb1 verb1-COO-verb2 verb2-VOB
+    for word, info in dependency_dict.items():
+        # 检查是否同时出现"SBV"和"COO"关系
+        if "SBV" in info.values() and "COO" in info.values():
+            sbv_word = None
+            coo_word = None
+            # 找到对应的分词
+            for dep_word, label in info.items():
+                if label == "SBV":
+                    sbv_word = dep_word
+                elif label == "COO":
+                    coo_word = dep_word
+            # 满足一个条件，找到了主谓
+            if coo_word and sbv_word:
+                # 检查是否verb2有VOB关系
+                if coo_word in dependency_dict:
+                    coo_verb_info = dependency_dict[coo_word]
+                    if "VOB" in coo_verb_info.values():
+                        vob_word = None
+                        for dw, lb in coo_verb_info.items():
+                            # 找到对应分词
+                            if lb == "VOB":
+                                vob_word = dw
+                        # 满足两个条件，找到了主谓宾
+                        if vob_word:
+                            flag = 5
+                            triple = "SBV: " + sbv_word, "coo_predicate: " + coo_word, "VOB: " + vob_word
+                            rule5_triples.append(triple)
+
+    return flag, rule5_triples
+
 
 # 不做命名实体识别自定义字典、指代消解自定义字典的事件三元组抽取
 def getTriple_dry(fileLoc):
@@ -245,7 +299,8 @@ if __name__ == '__main__':
     # test part
     #
     # sentence = '太公去看刘媪，见到一条蛟龙在她身上，后来刘媪怀了孕，就生了高祖。'
-    # sentence = '清明节是纪念祖先的节日'
+    # sentence = '端午节传遍全国各地，主要分布于广大汉族地区'
+    # sentence = '新年指夏历（农历）正月初一，是一年中最隆重的节日。'
     # test(sentence)
     # extraction(sentence)
     #
