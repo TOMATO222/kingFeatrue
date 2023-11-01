@@ -46,6 +46,16 @@ def test(sentcence):
     # 规则1
     # rule1(sentcence, 0)
 
+    # 规则2
+    # print(sentcence)
+    # cws_result = SEGnPOS(sentence).cws
+    # pos_result = SEGnPOS(sentence).pos
+    # dep_result = depProcess(sentence).dep
+    # # for c, p, h, l in zip(cws_result, pos_result, dep_result['head'], dep_result['label']):
+    # #     print(f"{c:<6} {p:<4} {h:<4} {l}")
+    # rule2(cws_result, pos_result, dep_result, 0)
+
+
     # 执行抽取函数
     # extraction(sentence)
 
@@ -72,7 +82,6 @@ def SEGnPOS(sentence):
 
 # 依存句法分析
 def depProcess(sentence):
-    sentences = StnSplit().batch_split(sentence)
     result = ltp.pipeline(sentence, tasks=["cws", "dep"])
     return result
     # result.cws -- 分词结果
@@ -89,17 +98,26 @@ def srlProcess(sentence):
 # 利用规则抽取事件三元组
 def extraction(sentence):
     print(sentence)
-    # 判断 规则1 是否抽取出了对应三元组 0-no, 1-yes
+    # 判断 规则 是否抽取出了对应三元组 0-no, 1-rule1 ,..., 5-rule5
     flag = 0
-    flag, triples = rule1(sentence, flag)
+    # 规则1
+    flag, triples1 = rule1(sentence, flag)
     # 规则1 抽到了三元组
     if flag == 1:
-        for triple in triples:
-            print(triple)
+        print("【RULE 1】", triples1)
+    # 进入规则2-5，依赖于词性标注结果+依存句法分析结果
+    cws_result = SEGnPOS(sentence).cws
+    pos_result = SEGnPOS(sentence).pos
+    dep_result = depProcess(sentence).dep
+    # 规则2
+    flag, triple2 = rule2(cws_result, pos_result, dep_result, flag)
+    # 规则2 抽到了三元组
+    if flag == 2:
+        print("【RULE 2】", triple2)
 
 # rule1: 语义角色标注结果A0 verb A1
 def rule1(sentence, flag):
-    print("rule1 begin")
+    # print("rule1 begin")
     rule1_triples = []
     # 语义角色标注结果集
     srl_results = srlProcess(sentence)
@@ -120,8 +138,51 @@ def rule1(sentence, flag):
             triple = "A0: " + dependencies['A0'], "predicate: " + predicate, "A1: " + dependencies['A1']
             rule1_triples.append(triple)
     # print(rule1_triples)
-    print("rule1 done")
+    # print("rule1 done")
     return flag, rule1_triples
+
+# rule 2: 依存句法分析，SBV verb VOB
+def rule2(cws_result, pos_result, dep_result, flag):
+    # print(cws_result)
+    # print(dep_result)
+    # 存储抽取到的三元组
+    rule2_triples = []
+    # 创建字典，存储 verb 的依存句法分析结果
+    dependency_dict = {}
+    # 遍历句子中的每个词
+    for i, word in enumerate(cws_result):
+        if pos_result[i] == 'v':
+            # 初始化一个空字典来存储指向该动词的分词的依存句法分析结果
+            head_dependencies = {}
+
+            # 查找所有head指向该动词的分词
+            for j, head in enumerate(dep_result['head']):
+                if head == i + 1:  # 注意：索引从0开始，需要加1
+                    head_word = cws_result[j]
+                    head_label = dep_result['label'][j]
+                    head_dependencies[head_word] = head_label
+
+            # 存储所有指向该动词的分词的依存句法分析结果
+            dependency_dict[word] = head_dependencies
+    # 遍历依存句法分析结果字典，找SBV & VOB 共现
+    for word, info in dependency_dict.items():
+        # 检查是否同时出现"SBV"和"VOB"关系
+        if "SBV" in info.values() and "VOB" in info.values():
+            sbv_word = None
+            vob_word = None
+            # 找到对应的分词
+            for dep_word, label in info.items():
+                if label == "SBV":
+                    sbv_word = dep_word
+                elif label == "VOB":
+                    vob_word = dep_word
+            if sbv_word and vob_word:
+                flag = 2
+                triple = "SBV: " + sbv_word, "predicate: " + word, "VOB: " + vob_word
+                rule2_triples.append(triple)
+                # print(triple)
+
+    return flag, rule2_triples
 
 
 # 不做命名实体识别自定义字典、指代消解自定义字典的事件三元组抽取
@@ -143,7 +204,7 @@ if __name__ == '__main__':
     # sentence = '太公去看刘媪，见到一条蛟龙在她身上，后来刘媪怀了孕，就生了高祖。'
     # test(sentence)
     #
-    fileLoc = '/Users/tanyuyao/Documents/PaperDocument/Historian/EnglishLoc/gaozu/target.txt'
+    fileLoc = '/Users/tanyuyao/Desktop/draft/target.txt'
     getTriple_dry(fileLoc)
     ########################################
 
