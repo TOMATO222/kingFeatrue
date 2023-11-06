@@ -1,5 +1,8 @@
 import os
 import glob
+import re
+import time
+
 from ltp import LTP, StnSplit
 ltp = LTP()  # 默认加载 Small 模型
 # ltp = LTP(path="small")
@@ -47,9 +50,9 @@ def test(sentcence):
     # rule1(sentcence, 0)
 
     print(sentcence)
-    cws_result = SEGnPOS(sentence).cws
-    pos_result = SEGnPOS(sentence).pos
-    dep_result = depProcess(sentence).dep
+    cws_result = SEGnPOS(sentcence).cws
+    pos_result = SEGnPOS(sentcence).pos
+    dep_result = depProcess(sentcence).dep
 
     # 规则2
     for c, p, h, l in zip(cws_result, pos_result, dep_result['head'], dep_result['label']):
@@ -59,7 +62,12 @@ def test(sentcence):
         print(word, ": ", info)
 
     # 规则5
-    flag, triples = rule5(dependency_dict, 0)
+    # flag, triples = rule5(dependency_dict, 0)
+    # print(triples)
+
+    # 规则6
+    flag, triples = rule6(dependency_dict, 0)
+    print(flag)
     print(triples)
 
 
@@ -74,7 +82,8 @@ def getSentence(fileLoc):
         sentences = file.read().split('\n')
     sentence_list = []
     for sentence in sentences:
-        sents_list = StnSplit().split(sentence)
+        new_sentence = re.sub(r'\s', '', sentence)
+        sents_list = StnSplit().split(new_sentence)
         for sent in sents_list:
             sentence_list.append(sent)
     return sentence_list
@@ -104,7 +113,14 @@ def srlProcess(sentence):
 
 # 利用规则抽取事件三元组
 def extraction(sentence):
+    # 返回结果
+    result = ""
+
     print(sentence)
+    result += sentence + '\n'
+
+    # 用于去重
+    triple_in = []
 
     # 判断 规则 是否抽取出了对应三元组 0-no, 1-rule1 ,..., 5-rule5
     flag = 0
@@ -113,7 +129,11 @@ def extraction(sentence):
     flag, triples1 = rule1(sentence, flag)
     # 规则1 抽到了三元组
     if flag == 1:
-        print("【RULE 1】", triples1)
+        for triple in triples1:
+            # print("【RULE 1】", triple)
+            result += "【RULE 1】" + str(triple) + '\n'
+            triple_in.append(triple)
+
     # 进入规则2-5，依赖于词性标注结果+依存句法分析结果
     cws_result = SEGnPOS(sentence).cws
     pos_result = SEGnPOS(sentence).pos
@@ -125,13 +145,37 @@ def extraction(sentence):
     flag, triple2, dependency_dict = rule2(cws_result, pos_result, dep_result, flag)
     # 规则2 抽到了三元组
     if flag == 2:
-        print("【RULE 2】", triple2)
+        for triple in triple2:
+            if triple not in triple_in:
+                # print("【RULE 2】", triple)
+                result += "【RULE 2】" + str(triple) + '\n'
+                triple_in.append(triple)
 
     # 规则5
     flag, triple5 = rule5(dependency_dict, flag)
     # 规则5 抽到了三元组
     if flag == 5:
-        print("【RULE 5】", triple5)
+        for triple in triple5:
+            if triple not in triple_in:
+                # print("【RULE 5】", triple)
+                result += "【RULE 5】" + str(triple) + '\n'
+                triple_in.append(triple)
+
+    # 规则6 用于优化和补充抽取
+    if flag == 0:
+        flag, triple6 = rule6(dependency_dict, flag)
+    # 规则6 抽到了三元组
+    if flag == 6:
+        for triple in triple6:
+            if triple not in triple_in:
+                result += "【RULE 6】" + str(triple) + '\n'
+                triple_in.append(triple)
+
+    # 方便看，每个句子完成后空行
+    # print('\n')
+    result += '\n'
+
+    return result
 
     # # 规则3 -- 不采用
     # flag, triple3 = rule3(dependency_dict, flag)
@@ -166,7 +210,7 @@ def rule1(sentence, flag):
         # 判断同时出现了'A0'和'A1'，即符合规则1
         if 'A0' in dependencies and 'A1' in dependencies:
             flag = 1
-            triple = "A0: " + dependencies['A0'], "predicate: " + predicate, "A1: " + dependencies['A1']
+            triple = dependencies['A0'], predicate, dependencies['A1']
             rule1_triples.append(triple)
     # print(rule1_triples)
     # print("rule1 done")
@@ -212,7 +256,7 @@ def rule2(cws_result, pos_result, dep_result, flag):
                     vob_word = dep_word
             if sbv_word and vob_word:
                 flag = 2
-                triple = "SBV: " + sbv_word, "predicate: " + word, "VOB: " + vob_word
+                triple = sbv_word, word, vob_word
                 rule2_triples.append(triple)
                 # print(triple)
 
@@ -236,7 +280,7 @@ def rule3(dependency_dict, flag):
                     vob_word = dep_word
             if att_word and vob_word:
                 flag = 3
-                triple = "ATT: " + att_word, "predicate: " + word, "VOB: " + vob_word
+                triple = att_word, word, vob_word
                 rule3_triples.append(triple)
                 # print(triple)
     return flag, rule3_triples
@@ -276,19 +320,57 @@ def rule5(dependency_dict, flag):
                         # 满足两个条件，找到了主谓宾
                         if vob_word:
                             flag = 5
-                            triple = "SBV: " + sbv_word, "coo_predicate: " + coo_word, "VOB: " + vob_word
+                            triple =sbv_word, coo_word, vob_word
                             rule5_triples.append(triple)
 
     return flag, rule5_triples
 
+# rule 6: 依存句法分析， 单SBV/ VOB
+def rule6(dependency_dict, flag):
+    # 存储抽取的三元组
+    rule6_triples = []
+
+    # 遍历verb的依存句法分析结果字典，找SBV or VOB
+    for word, info in dependency_dict.items():
+        # 检查只出现"SBV"
+        if "SBV" in info.values():
+            sbv_word = None
+            vob_word = None
+            # 找到对应的分词
+            for dep_word, label in info.items():
+                if label == "SBV":
+                    sbv_word = dep_word
+            if sbv_word:
+                flag = 6
+                triple = sbv_word, word, vob_word
+                rule6_triples.append(triple)
+
+        # 检查只出现"VOB"
+        elif "VOB" in info.values():
+            sbv_word = None
+            vob_word = None
+            # 找到对应的分词
+            for dep_word, label in info.items():
+                if label == "VOB":
+                    vob_word = dep_word
+            if vob_word:
+                flag = 6
+                triple = sbv_word, word, vob_word
+                rule6_triples.append(triple)
+
+    return flag, rule6_triples
+
 
 # 不做命名实体识别自定义字典、指代消解自定义字典的事件三元组抽取
-def getTriple_dry(fileLoc):
+def getTriple(inFile, outFile):
+    # 存储inflie每个句子的抽取结果
+    result = ""
     # 获得分句
-    sentence_list = getSentence(fileLoc)
+    sentence_list = getSentence(inFile)
     for sentence in sentence_list:
-        if sentence != " ":
-            extraction(sentence)
+        result += extraction(sentence)
+    with open(outFile, 'w', encoding='utf-8') as f:
+        f.write(result)
 
 
 
@@ -301,19 +383,30 @@ if __name__ == '__main__':
     # sentence = '太公去看刘媪，见到一条蛟龙在她身上，后来刘媪怀了孕，就生了高祖。'
     # sentence = '端午节传遍全国各地，主要分布于广大汉族地区'
     # sentence = '新年指夏历（农历）正月初一，是一年中最隆重的节日。'
+    # sentence = '周武王逝世。'
+    # sentence = '杀死比尔。'
     # test(sentence)
     # extraction(sentence)
     #
-    fileLoc = '/Users/tanyuyao/Desktop/draft/target.txt'
-    getTriple_dry(fileLoc)
+    # fileLoc = '/Users/tanyuyao/Desktop/draft/target.txt'
+    # outLoc = '/Users/tanyuyao/Desktop/draft/output.txt'
+    # getTriple_dry(fileLoc, outLoc)
     ########################################
 
     # ########################################
-    # # 获得目标文件名称
-    # # 统一路径文件夹
-    # directory = '/Users/tanyuyao/Documents/pythonCode/kingFeatrue/data'
-    # # 使用glob模块来获取目录下所有的txt文件
-    # txt_files = glob.glob(os.path.join(directory, '*.txt'))
-    # for fileLoc in txt_files:
-    #     print(fileLoc)
+    # process part
+    #
+    # 获得目标文件名称
+    # 统一读入文件的路径
+    directory = '/Users/tanyuyao/Documents/PaperDocument/targetDoc'
+    # 读入的文件
+    txt_files = glob.glob(os.path.join(directory, '*.txt'))
+    # 统一输出文件的路径
+    out_dir = '/Users/tanyuyao/Documents/pythonCode/kingFeatrue/data/Triple_clean'
+    # 构建输出文件的路径
+    for txt_file in txt_files:
+        output_file = os.path.join(out_dir, os.path.basename(txt_file))
+        print(txt_file, "PROCESSING")
+        getTriple(txt_file, output_file)
+        print(txt_file, "DONE")
     # ########################################
