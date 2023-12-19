@@ -1,0 +1,53 @@
+E:\PyCharmProjects\classifier-multi-label\venv\Scripts\python.exe E:/PyCharmProjects/classifier-multi-label/classifier_multi_label_seq2seq/train.py
+Load data from file (E:\PyCharmProjects\classifier-multi-label\classifier_multi_label_seq2seq\data\vocabulary_label.txt) finished !
+Loaded dict_label2id: {'S': 0, 'E': 1, '|': 2, '军事能力': 3, '政治能力': 4, '传奇色彩': 5, '私德品行': 6, '家庭背景': 7}
+Labels from file: ['S', 'E', '|', '军事能力', '政治能力', '传奇色彩', '私德品行', '家庭背景']
+hidden_size: 384
+
+Length of examples: 676
+Writing example 0 of 676
+
+Get features finished!
+Number of batch: 169
+
+Time:2023-12-19 12:55:11, Epoch:0, Batch number:0/169, Loss:2.064007, Accuracy:0.125
+Time:2023-12-19 12:58:05, Epoch:0, Batch number:100/169, Loss:1.0490019, Accuracy:0.375
+Time:2023-12-19 12:59:57, Epoch:1, Batch number:0/169, Loss:0.9664382, Accuracy:0.5
+Time:2023-12-19 13:02:39, Epoch:1, Batch number:100/169, Loss:0.53613585, Accuracy:0.75
+Time:2023-12-19 13:04:32, Epoch:2, Batch number:0/169, Loss:2.4578617, Accuracy:0.25
+Time:2023-12-19 13:07:18, Epoch:2, Batch number:100/169, Loss:0.30509588, Accuracy:0.75
+Time:2023-12-19 13:09:07, Epoch:3, Batch number:0/169, Loss:0.046877045, Accuracy:1.0
+Time:2023-12-19 13:11:50, Epoch:3, Batch number:100/169, Loss:0.8018233, Accuracy:0.75
+Time:2023-12-19 13:13:46, Epoch:4, Batch number:0/169, Loss:0.0026417647, Accuracy:1.0
+Time:2023-12-19 13:16:31, Epoch:4, Batch number:100/169, Loss:0.3444263, Accuracy:0.75
+Time:2023-12-19 13:18:20, Epoch:5, Batch number:0/169, Loss:0.008888901, Accuracy:1.0
+Time:2023-12-19 13:21:04, Epoch:5, Batch number:100/169, Loss:7.404907e-05, Accuracy:1.0
+Time:2023-12-19 13:22:54, Epoch:6, Batch number:0/169, Loss:0.0001549796, Accuracy:1.0
+Time:2023-12-19 13:25:39, Epoch:6, Batch number:100/169, Loss:7.337381e-05, Accuracy:1.0
+Time:2023-12-19 13:27:30, Epoch:7, Batch number:0/169, Loss:0.69316846, Accuracy:0.5
+Time:2023-12-19 13:30:15, Epoch:7, Batch number:100/169, Loss:2.4020032e-05, Accuracy:1.0
+Time:2023-12-19 13:32:04, Epoch:8, Batch number:0/169, Loss:1.2650968e-05, Accuracy:1.0
+Time:2023-12-19 13:34:50, Epoch:8, Batch number:100/169, Loss:0.00031381325, Accuracy:1.0
+Time:2023-12-19 13:36:48, Epoch:9, Batch number:0/169, Loss:2.1203241e-05, Accuracy:1.0
+Time:2023-12-19 13:39:31, Epoch:9, Batch number:100/169, Loss:0.2970774, Accuracy:0.75
+Time:2023-12-19 13:41:21, Epoch:10, Batch number:0/169, Loss:4.22412e-05, Accuracy:1.0
+Time:2023-12-19 13:44:02, Epoch:10, Batch number:100/169, Loss:0.2970678, Accuracy:0.75
+Time:2023-12-19 13:45:51, Epoch:11, Batch number:0/169, Loss:0.2970783, Accuracy:0.75
+Time:2023-12-19 13:48:30, Epoch:11, Batch number:100/169, Loss:0.29706573, Accuracy:0.75
+Time:2023-12-19 13:50:20, Epoch:12, Batch number:0/169, Loss:1.0073105e-05, Accuracy:1.0
+Time:2023-12-19 13:53:05, Epoch:12, Batch number:100/169, Loss:0.29706973, Accuracy:0.75
+Time:2023-12-19 13:55:07, Epoch:13, Batch number:0/169, Loss:0.6931546, Accuracy:0.5
+Time:2023-12-19 13:57:45, Epoch:13, Batch number:100/169, Loss:4.693836e-06, Accuracy:1.0
+Time:2023-12-19 13:59:38, Epoch:14, Batch number:0/169, Loss:1.4305099e-06, Accuracy:1.0
+Time:2023-12-19 14:02:15, Epoch:14, Batch number:100/169, Loss:4.61934e-06, Accuracy:1.0
+Time:2023-12-19 14:04:05, Epoch:15, Batch number:0/169, Loss:8.8511915e-06, Accuracy:1.0
+Time:2023-12-19 14:06:42, Epoch:15, Batch number:100/169, Loss:1.32019795e-05, Accuracy:1.0
+Time:2023-12-19 14:08:30, Epoch:16, Batch number:0/169, Loss:0.2970676, Accuracy:0.75
+Time:2023-12-19 14:11:09, Epoch:16, Batch number:100/169, Loss:8.031624e-06, Accuracy:1.0
+Time:2023-12-19 14:12:59, Epoch:17, Batch number:0/169, Loss:0.29706612, Accuracy:0.75
+Time:2023-12-19 14:15:36, Epoch:17, Batch number:100/169, Loss:1.6435371e-05, Accuracy:1.0
+Time:2023-12-19 14:17:25, Epoch:18, Batch number:0/169, Loss:0.2970753, Accuracy:0.75
+Time:2023-12-19 14:20:01, Epoch:18, Batch number:100/169, Loss:2.6523994e-06, Accuracy:1.0
+Time:2023-12-19 14:21:50, Epoch:19, Batch number:0/169, Loss:2.071255e-06, Accuracy:1.0
+Time:2023-12-19 14:24:28, Epoch:19, Batch number:100/169, Loss:0.2970702, Accuracy:0.75
+Train finished
