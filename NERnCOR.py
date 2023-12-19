@@ -87,7 +87,7 @@ def wudi(loc):
     modifytxt(open_path, outLoc)
 
     # 写入处理结果的文本地址
-    custom_filename = 'wudi.txt'
+    custom_filename = 'dishun.txt'
     write_path = os.path.join(loc, custom_filename)
 
     # 命名实体识别
@@ -103,7 +103,7 @@ def xia(loc):
     modifytxt(open_path, outLoc)
 
     # 写入处理结果的文本地址
-    custom_filename = 'xia.txt'
+    custom_filename = 'yu.txt'
     write_path = os.path.join(loc, custom_filename)
 
     # 命名实体识别
@@ -183,7 +183,7 @@ def yin(loc):
     modifytxt(open_path, outLoc)
 
     # 写入处理结果的文本地址
-    custom_filename = 'yin.txt'
+    custom_filename = 'wuwang.txt'
     write_path = os.path.join(loc, custom_filename)
 
     # 命名实体识别
@@ -199,7 +199,7 @@ def zhou(loc):
     modifytxt(open_path, outLoc)
 
     # 写入处理结果的文本地址
-    custom_filename = 'zhou.txt'
+    custom_filename = 'tang.txt'
     write_path = os.path.join(loc, custom_filename)
 
     # 命名实体识别

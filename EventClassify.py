@@ -78,7 +78,7 @@ def getClassify(events, embeddings, k, key):
     original_stdout = sys.stdout
 
     # 定义一个文件路径用于保存输出
-    output_file_path = "/Users/tanyuyao/Documents/pythonCode/kingFeatrue/data/eventCluster.txt"
+    output_file_path = "/data/event_cluster/eventCluster.txt"
 
     # 将stdout重定向到文件
     with open(output_file_path, 'a') as file:
