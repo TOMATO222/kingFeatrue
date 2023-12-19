@@ -1,0 +1,136 @@
+E:\PyCharmProjects\classifier-multi-label\venv\Scripts\python.exe E:/PyCharmProjects/classifier-multi-label/classifier_multi_label/train.py
+Load data from file (E:\PyCharmProjects\classifier-multi-label\classifier_multi_label\data\vocabulary_label.txt) finished !
+Read csv finished!(1)
+Head data: [[array([0, 0, 0, 1, 0, 0], dtype=int64), '秦始皇说：东南有天子气，秦始皇巡游东方，借以镇伏东南的天子气。高祖怀疑这件事与自己有关。'], [array([0, 0, 1, 0, 1, 0], dtype=int64), '夏禹崇敬德业'], [array([0, 0, 1, 0, 0, 0], dtype=int64), '夏禹举用益，夏禹授给国政'], [array([0, 0, 1, 0, 0, 0], dtype=int64), '成汤说，人从水中可以看到自己的样子，从百姓精神面貌可以知道国家治理状况'], [array([0, 0, 1, 0, 1, 0], dtype=int64), '孝景皇帝大赦天下，赐予百姓爵位一级，中二千石的官员和诸侯国的相赐爵']]
+Length of data: 675
+num_train_steps 843
+Read csv finished!(1)
+Head data: [[array([0, 0, 0, 1, 0, 0], dtype=int64), '一个火团落在武王的屋顶上，一个火团发出魄魄的鸣声'], [array([0, 1, 0, 0, 0, 0], dtype=int64), '桓攻打赵国的平阳，桓杀死赵国将领扈辄，桓斩首十万'], [array([0, 0, 1, 0, 1, 0], dtype=int64), '禹说我娶涂山氏的女儿时只经四天婚期就又去治水了我的孩子启从生下来我未曾抚育过所以才能使平治水土的工作取得成功'], [array([0, 0, 1, 0, 1, 0], dtype=int64), '齐国人茅焦劝告秦始皇，秦始皇有放逐母太后的名声。秦始皇迎接太后，秦始皇回到咸阳，秦始皇让太后居住在甘泉宫'], [array([0, 0, 1, 0, 0, 0], dtype=int64), '项羽封黥布为九江王']]
+Length of data: 675
+Writing example 0 of 675
+Get features finished!
+Number of batch: 22
+Time:2023-12-19 14:46:35, Epoch:0, Batch number:0/22, Loss:0.7017281
+Time:2023-12-19 14:46:56, Epoch:0, Batch number:10/22, Loss:0.5583026
+Time:2023-12-19 14:47:21, Epoch:0, Batch number:20/22, Loss:0.49232116
+Time:2023-12-19 14:47:25, Epoch:1, Batch number:0/22, Loss:0.46166655
+Time:2023-12-19 14:47:50, Epoch:1, Batch number:10/22, Loss:0.46460494
+Time:2023-12-19 14:48:14, Epoch:1, Batch number:20/22, Loss:0.41940126
+Time:2023-12-19 14:48:18, Epoch:2, Batch number:0/22, Loss:0.43734154
+Time:2023-12-19 14:48:39, Epoch:2, Batch number:10/22, Loss:0.4739382
+Time:2023-12-19 14:48:58, Epoch:2, Batch number:20/22, Loss:0.4466466
+Time:2023-12-19 14:49:01, Epoch:3, Batch number:0/22, Loss:0.38494357
+Time:2023-12-19 14:49:19, Epoch:3, Batch number:10/22, Loss:0.4362301
+Time:2023-12-19 14:49:37, Epoch:3, Batch number:20/22, Loss:0.41485167
+Time:2023-12-19 14:49:41, Epoch:4, Batch number:0/22, Loss:0.4046966
+Time:2023-12-19 14:49:59, Epoch:4, Batch number:10/22, Loss:0.39882824
+Time:2023-12-19 14:50:18, Epoch:4, Batch number:20/22, Loss:0.38455686
+Time:2023-12-19 14:50:22, Epoch:5, Batch number:0/22, Loss:0.33893177
+Time:2023-12-19 14:50:40, Epoch:5, Batch number:10/22, Loss:0.388963
+Time:2023-12-19 14:50:59, Epoch:5, Batch number:20/22, Loss:0.37667337
+Time:2023-12-19 14:51:03, Epoch:6, Batch number:0/22, Loss:0.35493135
+Time:2023-12-19 14:51:20, Epoch:6, Batch number:10/22, Loss:0.35157815
+Time:2023-12-19 14:51:37, Epoch:6, Batch number:20/22, Loss:0.34499875
+Time:2023-12-19 14:51:40, Epoch:7, Batch number:0/22, Loss:0.31423718
+Time:2023-12-19 14:51:58, Epoch:7, Batch number:10/22, Loss:0.30057546
+Time:2023-12-19 14:52:15, Epoch:7, Batch number:20/22, Loss:0.24932535
+Time:2023-12-19 14:52:19, Epoch:8, Batch number:0/22, Loss:0.311281
+Time:2023-12-19 14:52:36, Epoch:8, Batch number:10/22, Loss:0.29522604
+Time:2023-12-19 14:52:55, Epoch:8, Batch number:20/22, Loss:0.22130583
+Time:2023-12-19 14:52:58, Epoch:9, Batch number:0/22, Loss:0.23619221
+Time:2023-12-19 14:53:16, Epoch:9, Batch number:10/22, Loss:0.20203792
+Time:2023-12-19 14:53:34, Epoch:9, Batch number:20/22, Loss:0.22157456
+Time:2023-12-19 14:53:37, Epoch:10, Batch number:0/22, Loss:0.19340545
+Time:2023-12-19 14:53:55, Epoch:10, Batch number:10/22, Loss:0.15733713
+Time:2023-12-19 14:54:13, Epoch:10, Batch number:20/22, Loss:0.20710373
+Time:2023-12-19 14:54:16, Epoch:11, Batch number:0/22, Loss:0.14808805
+Time:2023-12-19 14:54:33, Epoch:11, Batch number:10/22, Loss:0.16458581
+Time:2023-12-19 14:54:51, Epoch:11, Batch number:20/22, Loss:0.17268308
+Time:2023-12-19 14:54:54, Epoch:12, Batch number:0/22, Loss:0.15655136
+Time:2023-12-19 14:55:12, Epoch:12, Batch number:10/22, Loss:0.120172225
+Time:2023-12-19 14:55:29, Epoch:12, Batch number:20/22, Loss:0.1284032
+Time:2023-12-19 14:55:32, Epoch:13, Batch number:0/22, Loss:0.11044129
+Time:2023-12-19 14:55:49, Epoch:13, Batch number:10/22, Loss:0.14553255
+Time:2023-12-19 14:56:07, Epoch:13, Batch number:20/22, Loss:0.12695383
+Time:2023-12-19 14:56:10, Epoch:14, Batch number:0/22, Loss:0.13520569
+Time:2023-12-19 14:56:28, Epoch:14, Batch number:10/22, Loss:0.120788336
+Time:2023-12-19 14:56:45, Epoch:14, Batch number:20/22, Loss:0.10875278
+Time:2023-12-19 14:56:48, Epoch:15, Batch number:0/22, Loss:0.08190968
+Time:2023-12-19 14:57:06, Epoch:15, Batch number:10/22, Loss:0.07881861
+Time:2023-12-19 14:57:24, Epoch:15, Batch number:20/22, Loss:0.08551953
+Time:2023-12-19 14:57:27, Epoch:16, Batch number:0/22, Loss:0.06709745
+Time:2023-12-19 14:57:45, Epoch:16, Batch number:10/22, Loss:0.09432215
+Time:2023-12-19 14:58:02, Epoch:16, Batch number:20/22, Loss:0.11958778
+Time:2023-12-19 14:58:05, Epoch:17, Batch number:0/22, Loss:0.09282324
+Time:2023-12-19 14:58:24, Epoch:17, Batch number:10/22, Loss:0.065711536
+Time:2023-12-19 14:58:41, Epoch:17, Batch number:20/22, Loss:0.082986
+Time:2023-12-19 14:58:45, Epoch:18, Batch number:0/22, Loss:0.0712414
+Time:2023-12-19 14:59:02, Epoch:18, Batch number:10/22, Loss:0.069482476
+Time:2023-12-19 14:59:19, Epoch:18, Batch number:20/22, Loss:0.06566915
+Time:2023-12-19 14:59:22, Epoch:19, Batch number:0/22, Loss:0.059540335
+Time:2023-12-19 14:59:40, Epoch:19, Batch number:10/22, Loss:0.060084466
+Time:2023-12-19 14:59:58, Epoch:19, Batch number:20/22, Loss:0.047362793
+Time:2023-12-19 15:00:01, Epoch:20, Batch number:0/22, Loss:0.04654467
+Time:2023-12-19 15:00:19, Epoch:20, Batch number:10/22, Loss:0.063064076
+Time:2023-12-19 15:00:35, Epoch:20, Batch number:20/22, Loss:0.06501712
+Time:2023-12-19 15:00:38, Epoch:21, Batch number:0/22, Loss:0.06792585
+Time:2023-12-19 15:00:56, Epoch:21, Batch number:10/22, Loss:0.06773193
+Time:2023-12-19 15:01:13, Epoch:21, Batch number:20/22, Loss:0.048692692
+Time:2023-12-19 15:01:16, Epoch:22, Batch number:0/22, Loss:0.05451261
+Time:2023-12-19 15:01:34, Epoch:22, Batch number:10/22, Loss:0.038262624
+Time:2023-12-19 15:01:52, Epoch:22, Batch number:20/22, Loss:0.042495262
+Time:2023-12-19 15:01:55, Epoch:23, Batch number:0/22, Loss:0.041689117
+Time:2023-12-19 15:02:12, Epoch:23, Batch number:10/22, Loss:0.04532398
+Time:2023-12-19 15:02:30, Epoch:23, Batch number:20/22, Loss:0.065072
+Time:2023-12-19 15:02:33, Epoch:24, Batch number:0/22, Loss:0.04273707
+Time:2023-12-19 15:02:50, Epoch:24, Batch number:10/22, Loss:0.04307875
+Time:2023-12-19 15:03:07, Epoch:24, Batch number:20/22, Loss:0.037447374
+Time:2023-12-19 15:03:10, Epoch:25, Batch number:0/22, Loss:0.044014394
+Time:2023-12-19 15:03:28, Epoch:25, Batch number:10/22, Loss:0.05327495
+Time:2023-12-19 15:03:46, Epoch:25, Batch number:20/22, Loss:0.037674937
+Time:2023-12-19 15:03:49, Epoch:26, Batch number:0/22, Loss:0.032958448
+Time:2023-12-19 15:04:06, Epoch:26, Batch number:10/22, Loss:0.0382303
+Time:2023-12-19 15:04:23, Epoch:26, Batch number:20/22, Loss:0.045274105
+Time:2023-12-19 15:04:27, Epoch:27, Batch number:0/22, Loss:0.04946514
+Time:2023-12-19 15:04:43, Epoch:27, Batch number:10/22, Loss:0.055025842
+Time:2023-12-19 15:05:01, Epoch:27, Batch number:20/22, Loss:0.037828818
+Time:2023-12-19 15:05:03, Epoch:28, Batch number:0/22, Loss:0.044686243
+Time:2023-12-19 15:05:21, Epoch:28, Batch number:10/22, Loss:0.06528998
+Time:2023-12-19 15:05:39, Epoch:28, Batch number:20/22, Loss:0.033953596
+Time:2023-12-19 15:05:42, Epoch:29, Batch number:0/22, Loss:0.03293495
+Time:2023-12-19 15:05:59, Epoch:29, Batch number:10/22, Loss:0.025575833
+Time:2023-12-19 15:06:16, Epoch:29, Batch number:20/22, Loss:0.035494614
+Time:2023-12-19 15:06:19, Epoch:30, Batch number:0/22, Loss:0.05398485
+Time:2023-12-19 15:06:36, Epoch:30, Batch number:10/22, Loss:0.036173828
+Time:2023-12-19 15:06:54, Epoch:30, Batch number:20/22, Loss:0.04719828
+Time:2023-12-19 15:06:57, Epoch:31, Batch number:0/22, Loss:0.045416374
+Time:2023-12-19 15:07:14, Epoch:31, Batch number:10/22, Loss:0.027828427
+Time:2023-12-19 15:07:31, Epoch:31, Batch number:20/22, Loss:0.04874806
+Time:2023-12-19 15:07:34, Epoch:32, Batch number:0/22, Loss:0.036300186
+Time:2023-12-19 15:07:52, Epoch:32, Batch number:10/22, Loss:0.02516312
+Time:2023-12-19 15:08:09, Epoch:32, Batch number:20/22, Loss:0.026115997
+Time:2023-12-19 15:08:12, Epoch:33, Batch number:0/22, Loss:0.024991333
+WARNING:tensorflow:From E:\PyCharmProjects\classifier-multi-label\venv\lib\site-packages\tensorflow_core\python\training\saver.py:963: remove_checkpoint (from tensorflow.python.training.checkpoint_management) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use standard file APIs to delete files with this prefix.
+Time:2023-12-19 15:08:30, Epoch:33, Batch number:10/22, Loss:0.039804902
+Time:2023-12-19 15:08:47, Epoch:33, Batch number:20/22, Loss:0.048541445
+Time:2023-12-19 15:08:50, Epoch:34, Batch number:0/22, Loss:0.02953851
+Time:2023-12-19 15:09:07, Epoch:34, Batch number:10/22, Loss:0.031179981
+Time:2023-12-19 15:09:25, Epoch:34, Batch number:20/22, Loss:0.045229062
+Time:2023-12-19 15:09:28, Epoch:35, Batch number:0/22, Loss:0.02804893
+Time:2023-12-19 15:09:46, Epoch:35, Batch number:10/22, Loss:0.03301188
+Time:2023-12-19 15:10:03, Epoch:35, Batch number:20/22, Loss:0.028004974
+Time:2023-12-19 15:10:06, Epoch:36, Batch number:0/22, Loss:0.027971873
+Time:2023-12-19 15:10:23, Epoch:36, Batch number:10/22, Loss:0.0328725
+Time:2023-12-19 15:10:41, Epoch:36, Batch number:20/22, Loss:0.02755163
+Time:2023-12-19 15:10:44, Epoch:37, Batch number:0/22, Loss:0.029928466
+Time:2023-12-19 15:11:02, Epoch:37, Batch number:10/22, Loss:0.04037444
+Time:2023-12-19 15:11:19, Epoch:37, Batch number:20/22, Loss:0.04720289
+Time:2023-12-19 15:11:22, Epoch:38, Batch number:0/22, Loss:0.02798448
+Time:2023-12-19 15:11:39, Epoch:38, Batch number:10/22, Loss:0.027786657
+Time:2023-12-19 15:11:56, Epoch:38, Batch number:20/22, Loss:0.038415305
+Time:2023-12-19 15:12:00, Epoch:39, Batch number:0/22, Loss:0.032335076
+Time:2023-12-19 15:12:17, Epoch:39, Batch number:10/22, Loss:0.031664435
+Time:2023-12-19 15:12:35, Epoch:39, Batch number:20/22, Loss:0.027681043
+Train finished
