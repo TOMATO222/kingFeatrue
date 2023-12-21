@@ -1,6 +1,8 @@
 from ltp import LTP
 import os
 import pandas as pd
+import re
+import matplotlib.pyplot as plt
 
 # ltp = LTP()
 
@@ -55,86 +57,53 @@ def checkDataNum():
                 totalTest += len(df)
     print("total test: ", totalTest)
 
-def completeModelData():
-    # 定义文件夹路径
-    folder_path = '/Users/tanyuyao/Documents/pythonCode/kingFeatrue/ModelData'
-    output_train_file_path = '/Users/tanyuyao/Documents/pythonCode/kingFeatrue/ModelData/train_total.csv'
-    output_test_file_path = '/Users/tanyuyao/Documents/pythonCode/kingFeatrue/ModelData/test_total.csv'
-    output_predicate_file_path = '/Users/tanyuyao/Documents/pythonCode/kingFeatrue/ModelData/predicate_total.csv'
 
-    # train.csv
-    totalTrain = 0
-    # 初始化一个空的 DataFrame
-    combined_df_train = pd.DataFrame(columns=['content', 'label'])
 
-    # 遍历文件夹
-    for root, dirs, files in os.walk(folder_path):
-        for file in files:
-            # 检查文件名是否为train.csv
-            if file == 'train.csv':
-                # 构建完整的文件路径
-                file_path = os.path.join(root, file)
+def drawLoss():
+    # 读取日志文件
+    with open('/Users/tanyuyao/Documents/pythonCode/kingFeatrue/Albert训练打印.txt', 'r') as file:
+        log_content = file.read()
 
-                # 读取CSV文件
-                df = pd.read_csv(file_path)
+    # 使用正则表达式提取时间、Epoch、Batch number、Loss、Accuracy
+    pattern = r'Time:(.*?), Epoch:(\d+), Batch number:(\d+)/\d+, Loss:([\d.]+)'
 
-                # 统计条数
-                totalTrain += len(df)
-                # 合并到总的 DataFrame
-                combined_df_train = pd.concat([combined_df_train, df[['content', 'label']]], ignore_index=True)
-    print("total train: ", totalTrain)
-    # 将合并后的数据保存到新文件中
-    combined_df_train.to_csv(output_train_file_path, index=False)
+    matches = re.findall(pattern, log_content)
 
-    # test.csv
-    totalTest = 0
-    # 初始化一个空的 DataFrame
-    combined_df_test = pd.DataFrame(columns=['content', 'label'])
-    # 遍历文件夹
-    for root, dirs, files in os.walk(folder_path):
-        for file in files:
-            # 检查文件名是否为train.csv
-            if file == 'test.csv':
-                # 构建完整的文件路径
-                file_path = os.path.join(root, file)
+    # 提取数据
+    times = [match[0] for match in matches]
+    epochs = [int(match[1]) for match in matches]
+    batch_numbers = [int(match[2]) for match in matches]
+    loss_values = [float(match[3]) for match in matches]
+    # accuracy_values = [float(match[4]) for match in matches]
 
-                # 读取CSV文件
-                df = pd.read_csv(file_path)
+    # 绘制曲线图
+    plt.figure(figsize=(12, 6))
 
-                # 统计条数
-                totalTest += len(df)
-                # 合并到总的 DataFrame
-                combined_df_test = pd.concat([combined_df_test, df[['content', 'label']]], ignore_index=True)
-    print("total test: ", totalTest)
-    # 将合并后的数据保存到新文件中
-    combined_df_test.to_csv(output_test_file_path, index=False)
+    # 绘制 Loss 曲线
+    plt.subplot(2, 1, 1)
+    plt.plot(loss_values, label='Loss', color='blue')
+    plt.title('Loss Over Time')
+    plt.xlabel('Batch Number')
+    plt.ylabel('Loss')
+    plt.legend()
 
-    # predicate.csv
-    totalPredicate = 0
-    # 初始化一个空的 DataFrame
-    combined_df_predicate = pd.DataFrame(columns=['content', 'label'])
-    # 遍历文件夹
-    for root, dirs, files in os.walk(folder_path):
-        for file in files:
-            # 检查文件名是否为train.csv
-            if file == 'predicate.csv':
-                # 构建完整的文件路径
-                file_path = os.path.join(root, file)
+    # 绘制 Accuracy 曲线
+    # plt.subplot(2, 1, 2)
+    # plt.plot(accuracy_values, label='Accuracy', color='green')
+    # plt.title('Accuracy Over Time')
+    # plt.xlabel('Batch Number')
+    # plt.ylabel('Accuracy')
+    # plt.legend()
 
-                # 读取CSV文件
-                df = pd.read_csv(file_path)
+    plt.tight_layout()
+    plt.show()
 
-                # 统计条数
-                totalPredicate += len(df)
-                # 合并到总的 DataFrame
-                combined_df_predicate = pd.concat([combined_df_predicate, df[['content', 'label']]], ignore_index=True)
-    print("total predicate: ", totalPredicate)
-    # 将合并后的数据保存到新文件中
-    combined_df_predicate.to_csv(output_predicate_file_path, index=False)
+
 
 if __name__ == '__main__':
     # SEG()
     # DP()
     # SRL()
     # checkDataNum()
-    completeModelData()
+    # completeModelData()
+    drawLoss()
